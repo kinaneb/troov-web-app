@@ -1,0 +1,22 @@
+# docker-compose.develop.yaml
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: docker/server.develop.Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./server/.env
+    volumes:
+      - ./server:/usr/src/app
+  nuxt-app:
+    build:
+      context: .
+      dockerfile: docker/nuxt-app.develop.Dockerfile
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./nuxt-app:/usr/src/app
+      - /usr/src/app/node_modules
