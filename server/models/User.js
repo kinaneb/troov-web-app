@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
-import hashPassword from '../utils/auth';
+import hashPassword from '../utils/hashPassword.js';
+import e from 'express';
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -24,5 +25,7 @@ userSchema.pre('save', async function(next) {
 }); // this is a middleware that will run before saving a document
 
 const User = mongoose.model('User', userSchema);
+
+export default User;
 
 // TODO: adding email, role, refreshToken, etc.
