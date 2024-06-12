@@ -20,3 +20,12 @@ services:
     volumes:
       - ./nuxt-app:/usr/src/app
       - /usr/src/app/node_modules
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongodb-data:/data/db
+
+volumes:
+  mongodb-data:
