@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import hashPassword from '../utils/auth';
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -12,6 +13,15 @@ const userSchema = new mongoose.Schema({
         required: true
     }
 });
+
+
+userSchema.pre('save', async function(next) {
+    const user = this;
+    if (user.isModified('password')) { 
+        user.password = await hashPassword(user.password);
+    }
+    next();
+}); // this is a middleware that will run before saving a document
 
 const User = mongoose.model('User', userSchema);
 
