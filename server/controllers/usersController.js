@@ -28,10 +28,15 @@ const getUser = async (req, res) => {
 }
 
 const createUser = async (req, res) => {
-    const user = new User(req.body);
+    const { username, password } = req.body;
     try {
-        const newUser = await user.save();
-        res.status(201).json(newUser);
+        const userIsAlreadyRegistered = await User.findOne({username});
+        if (userIsAlreadyRegistered) {
+            return res.status(409).json({ message: 'User already exists' });
+        }
+        const newUser = new User({ username, password });
+        await user.save();
+        res.status(201).json(newUser.toObject());
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
@@ -45,7 +50,7 @@ const updateUser = async (req, res) => {
             Object.assign(user, req.body);
             const updatedUser = await user.save();
 
-            res.json(updatedUser);
+            res.json(updatedUser.toObject());
         } else {
             res.status(404).json({ message: 'User not found' });
         }
