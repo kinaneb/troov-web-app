@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 import hashPassword from '../utils/hashPassword.js';
-import e from 'express';
 
 const userSchema = new mongoose.Schema({
     username: {
