@@ -3,8 +3,10 @@ import express from 'express';
 
 const router = express.Router();
 
-import {createUser} from '../controllers/usersController.js';
+import {createUser, userLogin} from '../controllers/usersController.js';
 
 router.post('/register', createUser);
+
+router.post('/login', userLogin);
 
 export default router;

@@ -1,4 +1,5 @@
 import User from '../models/User.js';
+import { comparePasswords } from '../utils/hashPassword.js';
 
 const allUsers = async (req, res) => {
     try {
@@ -18,8 +19,8 @@ const getUser = async (req, res) => {
     try {
         const user = await User.findById(userId);
         if (user) {
-            const { password, ...rest } = user;
-            res.json({ user: rest});
+            const { password, ...userWithoutPassword } = user;
+            res.json({ user: userWithoutPassword});
         } else {
             res.status(404).json({ message: 'User not found' });
         }
@@ -45,6 +46,7 @@ const updateUser = async (req, res) => {
         if (user) {
             Object.assign(user, req.body);
             const updatedUser = await user.save();
+
             res.json(updatedUser);
         } else {
             res.status(404).json({ message: 'User not found' });
@@ -71,4 +73,25 @@ const deleteUser = async (req, res) => {
     }
 }
 
-export { allUsers, getUser, createUser, updateUser, deleteUser };
+const userLogin = async (req, res) => {
+    const { username, password } = req.body;
+    try {
+        const user = await User.findOne({username});
+        if (user) {
+            const isPasswordValid = await comparePasswords(password, user.password);
+            if (!isPasswordValid) {
+                return res.status(401).json({ message: 'Invalid credentials' });
+            }
+            // TODO generate JWT
+            const { password: removedPassword, ...userWithoutPassword } = user.toObject();
+            res.json({ user: userWithoutPassword });
+        } else {
+            res.status(401).json({ message: 'Invalid credentials' });
+        }
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+export { allUsers, getUser, createUser, updateUser, deleteUser, userLogin};
