@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 import mongoose from 'mongoose';
 import auth from './routers/auth.js';
+import signaledObjectRouter from './routers/signaledObject.js';
 
 dotenv.config(); 
 
@@ -16,6 +17,8 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 app.use('', auth);
+
+app.use('/objects', signaledObjectRouter);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
