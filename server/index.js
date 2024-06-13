@@ -3,7 +3,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 import mongoose from 'mongoose';
-import users from './routers/users.js';
+import auth from './routers/auth.js';
 
 dotenv.config(); 
 
@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-app.use('', users);
+app.use('', auth);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');

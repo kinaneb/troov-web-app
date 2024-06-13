@@ -5,8 +5,7 @@ const allUsers = async (req, res) => {
     try {
         const users = await User.find();
         const usersWithoutPassword = users.map(user => {
-            const { password, ...rest } = user;
-            return rest;
+            return user.toObject();
         });
         res.json(usersWithoutPassword);
     } catch (error) {
@@ -19,8 +18,7 @@ const getUser = async (req, res) => {
     try {
         const user = await User.findById(userId);
         if (user) {
-            const { password, ...userWithoutPassword } = user;
-            res.json({ user: userWithoutPassword});
+            res.json(user.toObject());
         } else {
             res.status(404).json({ message: 'User not found' });
         }
@@ -76,15 +74,14 @@ const deleteUser = async (req, res) => {
 const userLogin = async (req, res) => {
     const { username, password } = req.body;
     try {
-        const user = await User.findOne({username});
+        const user = await User.findOne({username}).select('+password');
         if (user) {
             const isPasswordValid = await comparePasswords(password, user.password);
             if (!isPasswordValid) {
                 return res.status(401).json({ message: 'Invalid credentials' });
             }
             // TODO generate JWT
-            const { password: removedPassword, ...userWithoutPassword } = user.toObject();
-            res.json({ user: userWithoutPassword });
+            res.json(user.toJSON());
         } else {
             res.status(401).json({ message: 'Invalid credentials' });
         }
