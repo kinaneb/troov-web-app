@@ -32,6 +32,11 @@ const objects = ref([]);
 const loading = ref(true);
 const { $axios } = useNuxtApp();
 
+definePageMeta({
+  middleware: 'auth'
+})
+
+
 const fetchObjects = async () => {
   try {
     const response = await $axios.get('/api/objects');

@@ -1,53 +1,55 @@
 <template>
-    <div class="container mt-5 page-background">
-      <h1 class="mb-4 page-title">Login</h1>
-      <form @submit.prevent="login" class="needs-validation" novalidate>
-        <div class="mb-3">
-          <label for="username" class="form-label">Username</label>
-          <input v-model="form.username" type="text" id="username" required class="form-control" />
-          <div class="invalid-feedback">Username is required.</div>
-        </div>
-        <div class="mb-3">
-          <label for="password" class="form-label">Password</label>
-          <input v-model="form.password" type="password" id="password" required class="form-control" />
-          <div class="invalid-feedback">Password is required.</div>
-        </div>
-        <button type="submit" class="btn btn-custom btn-block">Login</button>
-      </form>
-      <div v-if="message" class="alert alert-info mt-3">{{ message }}</div>
-    </div>
-  </template>
-  
-  <script setup lang="ts">
-  import { ref } from 'vue';
-  import { useRouter } from 'vue-router';
-  import { useNuxtApp } from '#app';
-  
-  const form = ref({
-    username: '',
-    password: '',
-  });
-  
-  const message = ref('');
-  const router = useRouter();
-  const { $axios } = useNuxtApp();
-  
-  const login = async () => {
-    try {
-      const response = await $axios.post('/login', form.value);
-      if (response.status === 200) {
-        localStorage.setItem('token', response.data.token);
-        message.value = 'Login successful!';
-        router.push('/objects');
-      }
-    } catch (error) {
-      message.value = 'Failed to login. Please check your credentials.';
-    }
-  };
-  </script>
-  
+  <div class="container mt-5 page-background">
+    <h1 class="mb-4 page-title">Login</h1>
+    <form @submit.prevent="login" class="needs-validation" novalidate>
+      <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input v-model="username" type="text" id="username" required class="form-control" />
+        <div class="invalid-feedback">Username is required.</div>
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input v-model="password" type="password" id="password" required class="form-control" />
+        <div class="invalid-feedback">Password is required.</div>
+      </div>
+      <button type="submit" class="btn btn-custom btn-block">Login</button>
+      <button @click="navigateToRegister" type="button" class="btn btn-outline-custom btn-block mt-3">Register</button>
+    </form>
+    <div v-if="message" class="alert alert-info mt-3">{{ message }}</div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useNuxtApp } from '#app';
+import { useAuthStore } from '@/stores/auth';
+
+const username = ref('');
+const password = ref('');
+const message = ref('');
+const router = useRouter();
+const { $axios } = useNuxtApp();
+
+const authStore = useAuthStore();
+
+
+const login = async () => {
+  try {
+    const response = await $axios.post('/login', { username: username.value, password: password.value });
+    await authStore.login();
+    router.push('/');
+  } catch (error) {
+    message.value = 'Failed to login. Please check your credentials.';
+  }
+};
+
+const navigateToRegister = () => {
+  router.push('/register');
+};
+</script>
+
   <style scoped>
-  /* Same styles as your other pages for consistency */
   .page-background {
     background-color: #fff;
     padding: 40px;

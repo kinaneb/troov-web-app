@@ -54,6 +54,7 @@ const addObject = async () => {
         description: '',
         signaledDate: '',
         status: 'found', // Reset to 'found' after successful submission
+        // logged in user id can be added here as owner if found or signaled by if lost
       };
     }
   } catch (error) {
