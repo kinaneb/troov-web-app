@@ -31,7 +31,7 @@ const { $axios } = useNuxtApp();
 
 const register = async () => {
   try {
-    const response = await $axios.post('/register', { username, password });
+    const response = await $axios.post('/register', { username: username.value, password: password.value });
     if (process.client) {
       localStorage.setItem('token', response.data.token);
     }

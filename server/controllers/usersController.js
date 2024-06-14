@@ -35,7 +35,7 @@ const createUser = async (req, res) => {
             return res.status(409).json({ message: 'User already exists' });
         }
         const newUser = new User({ username, password });
-        await user.save();
+        await newUser.save();
         res.status(201).json(newUser.toObject());
     } catch (error) {
         res.status(400).json({ message: error.message });
