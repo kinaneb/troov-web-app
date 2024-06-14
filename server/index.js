@@ -28,7 +28,7 @@ app.use(logger);
 
 app.use('', auth);
 
-app.use('/objects', signaledObjectRouter);
+app.use('/api/objects', signaledObjectRouter);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
