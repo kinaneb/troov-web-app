@@ -71,6 +71,7 @@ This command will build and start both the backend and frontend services.
 ### Frontend (nuxt-app):
 - /: Displays a list of objects with basic details.
 - /register: New users can create an account.
+- /login: Allows users to log in with their credentials.
 - /add-object: Form to add a new object to the system.
 
 - .env - Environment variables file.
