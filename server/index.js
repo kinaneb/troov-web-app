@@ -5,6 +5,7 @@ import connectDB from './config/db.js';
 import mongoose from 'mongoose';
 import auth from './routers/auth.js';
 import signaledObjectRouter from './routers/signaledObject.js';
+import logger from './middlewares/logger.js';
 
 dotenv.config(); 
 
@@ -15,6 +16,8 @@ connectDB();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+
+app.use(logger);
 
 app.use('', auth);
 
