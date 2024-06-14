@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import auth from './routers/auth.js';
 import signaledObjectRouter from './routers/signaledObject.js';
 import logger from './middlewares/logger.js';
+import cors from 'cors';
 
 dotenv.config(); 
 
@@ -16,6 +17,12 @@ connectDB();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+
+app.use(cors({
+  origin: 'http://localhost:3001', // the frontend URL
+  credentials: true,
+}));
+
 
 app.use(logger);
 
