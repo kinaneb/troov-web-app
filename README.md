@@ -68,4 +68,9 @@ This command will build and start both the backend and frontend services.
 - utils/ - Contains utility functions.
 - index.js - Entry point for the backend server.
 
+### Frontend (nuxt-app):
+- /:** Displays a list of objects with basic details.
+- /register:** New users can create an account.
+- /add-object:** Form to add a new object to the system.
+
 - .env - Environment variables file.
